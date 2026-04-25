@@ -357,9 +357,23 @@
           </div>
         </section>
       </main>
+
+      <footer class="siteFooter" aria-label="页脚">
+        <div class="siteFooterInner">
+          <span>WeChat: AdminWDQ</span>
+          <span class="sep" aria-hidden="true">|</span>
+          <span>Copyright © <span id="footerYear"></span> AdminWDQ</span>
+        </div>
+      </footer>
     </div>
 
     <script src="./assets/vendor/qrcode-generator.js"></script>
     <script type="module" src="./assets/app.js"></script>
+    <script>
+      (function () {
+        const el = document.getElementById('footerYear');
+        if (el) el.textContent = String(new Date().getFullYear());
+      })();
+    </script>
   </body>
 </html>

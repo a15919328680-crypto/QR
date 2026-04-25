@@ -74,6 +74,18 @@
         opacity: 0.75;
         font-weight: 700;
       }
+
+      .footer {
+        margin-top: 12px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,0.12);
+        color: rgba(229,231,235,0.62);
+        font-size: 12px;
+        line-height: 1.45;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
     </style>
   </head>
   <body>
@@ -85,9 +97,20 @@
         <div class="hint">
           说明：部分 App 深度链接可能被系统或浏览器限制。建议同时提供“网页链接”作为兜底。
         </div>
+        <div class="footer" aria-label="页脚">
+          <span>WeChat: AdminWDQ</span>
+          <span class="muted" aria-hidden="true">|</span>
+          <span>Copyright © <span id="footerYear"></span> AdminWDQ</span>
+        </div>
       </div>
     </div>
 
     <script type="module" src="./assets/go.js"></script>
+    <script>
+      (function () {
+        const el = document.getElementById('footerYear');
+        if (el) el.textContent = String(new Date().getFullYear());
+      })();
+    </script>
   </body>
 </html>

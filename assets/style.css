@@ -105,6 +105,29 @@ body {
   margin-top: 14px;
 }
 
+.siteFooter {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--stroke);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.05));
+  box-shadow: var(--shadow);
+  color: rgba(255,255,255,0.70);
+  font-size: 12px;
+}
+
+.siteFooterInner {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.siteFooter .sep {
+  opacity: 0.55;
+}
+
 .panel {
   border-radius: var(--radius);
   border: 1px solid var(--stroke);
