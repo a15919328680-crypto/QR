@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>聚合跳转</title>
+    <meta name="description" content="多平台一键跳转" />
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+        background: #0b1020;
+        color: #e5e7eb;
+      }
+      .wrap {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+      }
+      .card {
+        width: min(520px, 100%);
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.14);
+        background: rgba(255,255,255,0.06);
+        box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+        padding: 16px;
+      }
+      .title {
+        font-weight: 900;
+        font-size: 18px;
+        letter-spacing: 0.2px;
+      }
+      .desc {
+        margin-top: 6px;
+        color: rgba(229,231,235,0.72);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .btns {
+        margin-top: 12px;
+        display: grid;
+        gap: 10px;
+      }
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.16);
+        background: rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.92);
+        border-radius: 14px;
+        padding: 12px 12px;
+        font-weight: 800;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background: rgba(255,255,255,0.10);
+      }
+      .hint {
+        margin-top: 12px;
+        color: rgba(229,231,235,0.58);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .muted {
+        opacity: 0.75;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <div class="title" id="title">选择打开方式</div>
+        <div class="desc" id="desc">如果无法自动跳转，请手动选择。</div>
+        <div class="btns" id="btns"></div>
+        <div class="hint">
+          说明：部分 App 深度链接可能被系统或浏览器限制。建议同时提供“网页链接”作为兜底。
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./assets/go.js"></script>
+  </body>
+</html>

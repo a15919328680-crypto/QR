@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="zh-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QR Studio</title>
+    <meta name="description" content="精致、丰富、灵活的二维码在线生成工具" />
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brandMark" aria-hidden="true"></div>
+          <div>
+            <div class="brandName">QR Studio</div>
+            <div class="brandSub">精致的二维码在线生成与导出</div>
+          </div>
+        </div>
+        <div class="topActions">
+          <a class="link" href="#" id="btnShareLink">复制分享链接</a>
+          <a class="link" href="#" id="btnReset">重置</a>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel controls" aria-label="配置面板">
+          <div class="segmented" role="tablist" aria-label="模式">
+            <button class="segBtn" type="button" role="tab" aria-selected="true" data-mode="single">单个</button>
+            <button class="segBtn" type="button" role="tab" aria-selected="false" data-mode="batch">批量</button>
+          </div>
+
+          <div class="card" id="singleMode">
+            <div class="cardTitle">内容</div>
+            <div class="row">
+              <label class="field">
+                <span class="label">类型</span>
+                <select id="payloadType">
+                  <option value="text">文本 / URL</option>
+                  <option value="url">URL(UTM)</option>
+                  <option value="wifi">WiFi</option>
+                  <option value="vcard">名片 vCard</option>
+                  <option value="mecard">名片 MeCard</option>
+                  <option value="tel">电话</option>
+                  <option value="sms">短信 SMS</option>
+                  <option value="email">邮件 Email</option>
+                  <option value="geo">地理位置</option>
+                  <option value="event">日历事件</option>
+                  <option value="image">图片链接</option>
+                  <option value="file">文件下载</option>
+                  <option value="audio">音频链接</option>
+                  <option value="video">视频链接</option>
+                  <option value="form">表单链接</option>
+                  <option value="h5">H5 页面</option>
+                  <option value="social">微信/QQ/抖音/小红书跳转</option>
+                  <option value="multi">聚合码（多平台）</option>
+                </select>
+              </label>
+            </div>
+
+            <div id="payloadForm"></div>
+          </div>
+
+          <div class="card hidden" id="batchMode">
+            <div class="cardTitle">批量内容</div>
+            <div class="hint">每行一条内容（URL 或文本）。最多 50 条。</div>
+            <label class="field">
+              <span class="label">内容列表</span>
+              <textarea id="batchInput" rows="6" placeholder="https://example.com\n欢迎关注我们\n..." spellcheck="false"></textarea>
+            </label>
+
+            <div class="row">
+              <label class="field">
+                <span class="label">文件名前缀</span>
+                <input id="batchPrefix" type="text" value="qr" placeholder="qr" />
+              </label>
+            </div>
+
+            <div class="row actions">
+              <button class="btn" type="button" id="btnBatchPreview">生成列表</button>
+              <button class="btn primary" type="button" id="btnBatchZip">ZIP 打包下载</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">规格与纠错</div>
+            <div class="grid2">
+              <label class="field">
+                <span class="label">纠错 ECC</span>
+                <select id="ecc">
+                  <option value="M">M（默认）</option>
+                  <option value="L">L（容量更大）</option>
+                  <option value="Q">Q（更稳）</option>
+                  <option value="H">H（最稳）</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span class="label">尺寸 px</span>
+                <input id="sizePx" type="number" min="160" max="2048" step="16" value="512" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="label">留白（Quiet Zone）</span>
+              <input id="marginModules" type="range" min="1" max="16" value="4" />
+              <div class="rangeMeta"><span id="marginModulesValue">4</span> modules</div>
+            </label>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">风格</div>
+
+            <div class="grid2">
+              <label class="field">
+                <span class="label">前景色</span>
+                <input id="fg" type="color" value="#0b1220" />
+              </label>
+              <label class="field">
+                <span class="label">背景色</span>
+                <input id="bg" type="color" value="#ffffff" />
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="check">
+                <input id="bgTransparent" type="checkbox" />
+                <span>透明背景（导出 PNG/SVG 可叠加底图）</span>
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="check">
+                <input id="gradientEnabled" type="checkbox" />
+                <span>启用渐变</span>
+              </label>
+            </div>
+
+            <div class="grid2" id="gradientControls">
+              <label class="field">
+                <span class="label">渐变色 2</span>
+                <input id="gradientColor2" type="color" value="#4f46e5" />
+              </label>
+              <label class="field">
+                <span class="label">角度</span>
+                <input id="gradientAngle" type="number" min="0" max="359" value="45" />
+              </label>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span class="label">模块形状</span>
+                <select id="moduleShape">
+                  <option value="square">方形</option>
+                  <option value="rounded">圆角</option>
+                  <option value="dot">圆点</option>
+                  <option value="blob">连通圆角</option>
+                  <option value="soft">柔和方块</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="label">Eyes 样式</span>
+                <select id="eyeStyle">
+                  <option value="square">方形</option>
+                  <option value="rounded">圆角</option>
+                  <option value="dot">圆点</option>
+                  <option value="ring">圆环</option>
+                  <option value="orbit">中心圆</option>
+                  <option value="notched">切角</option>
+                  <option value="double">双线框</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="check">
+                <input id="moduleInsetEnabled" type="checkbox" />
+                <span>模块描边（镂空细节）</span>
+              </label>
+            </div>
+            <label class="field" id="moduleInsetControls">
+              <span class="label">强度</span>
+              <input id="moduleInset" type="range" min="0.04" max="0.22" step="0.01" value="0.12" />
+              <div class="rangeMeta"><span id="moduleInsetValue">0.12</span></div>
+            </label>
+            <div class="hint">提示：模块像素太小时描边会影响识别，工具会自动提示并建议关闭。</div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">Logo</div>
+            <div class="row">
+              <label class="check">
+                <input id="logoEnabled" type="checkbox" />
+                <span>启用 Logo 叠加</span>
+              </label>
+            </div>
+            <div class="row">
+              <input id="logoFile" type="file" accept="image/*" />
+            </div>
+            <label class="field">
+              <span class="label">Logo 大小</span>
+              <input id="logoScale" type="range" min="0.10" max="0.34" step="0.01" value="0.20" />
+              <div class="rangeMeta"><span id="logoScaleValue">0.20</span></div>
+            </label>
+            <div class="hint" id="logoHint"></div>
+          </div>
+
+          <!-- 标题与卡片已整合到右侧“应用场景”，减少左侧页面长度 -->
+
+          <!-- 预设与灵感已移动到右侧预览区，减少重复与操作 -->
+
+           <!-- 导出已整合到右侧“应用场景”，减少左侧页面长度 -->
+
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="panel preview" aria-label="预览">
+          <div class="previewHeader">
+            <div>
+              <div class="previewTitle">实时预览</div>
+              <div class="previewMeta" id="previewMeta">准备就绪</div>
+            </div>
+            <div class="warnings" id="warnings"></div>
+          </div>
+
+          <div class="canvasWrap">
+            <canvas id="canvas" width="800" height="800"></canvas>
+          </div>
+
+          <div class="scenarioWrap" aria-label="应用场景">
+            <div class="inspirationHeader">
+              <div>
+                <div class="inspirationTitle">应用场景</div>
+                <div class="inspirationHint">点击场景一键套用版式与风格，不会修改你已选择的内容类型与内容。</div>
+              </div>
+            </div>
+
+            <div class="presetFilters" id="sceneFilters" aria-label="场景筛选">
+              <button class="chip" type="button" data-cat="private">私域引流</button>
+              <button class="chip" type="button" data-cat="payment">商业收款</button>
+              <button class="chip" type="button" data-cat="store">门店经营</button>
+              <button class="chip" type="button" data-cat="office">办公活动</button>
+              <button class="chip" type="button" data-cat="docs">资料传播</button>
+              <button class="chip" type="button" data-cat="life">生活便民</button>
+              <button class="chip" type="button" data-cat="brand">品牌推广</button>
+              <button class="chip" type="button" data-cat="trace">溯源管理</button>
+              <button class="chip" type="button" data-cat="gov">政务校园</button>
+              <button class="chip" type="button" data-cat="personal">个人使用</button>
+              <button class="chip" type="button" data-cat="all">全部</button>
+            </div>
+
+            <div class="presetButtonsWrap" aria-label="场景按钮区">
+              <div class="presetButtons" id="sceneButtons" aria-label="场景按钮"></div>
+            </div>
+
+            <div class="sceneLayout" aria-label="场景版式">
+              <div class="sceneLayoutTitle">标题与卡片</div>
+
+              <div class="row">
+                <label class="check">
+                  <input id="captionEnabled" type="checkbox" />
+                  <span>显示标题</span>
+                </label>
+              </div>
+              <div class="grid2" id="captionControls">
+                <label class="field">
+                  <span class="label">标题</span>
+                  <input id="captionTitle" type="text" placeholder="扫码访问" />
+                </label>
+                <label class="field">
+                  <span class="label">副标题</span>
+                  <input id="captionSubtitle" type="text" placeholder="example.com" />
+                </label>
+              </div>
+
+              <div class="row" style="margin-top: 10px;">
+                <label class="check">
+                  <input id="cardEnabled" type="checkbox" checked />
+                  <span>卡片背景</span>
+                </label>
+              </div>
+              <div class="grid2" id="cardControls">
+                <label class="field">
+                  <span class="label">圆角</span>
+                  <input id="cardRadius" type="number" min="0" max="48" value="20" />
+                </label>
+                <label class="field">
+                  <span class="label">内边距</span>
+                  <input id="cardPadding" type="number" min="0" max="64" value="22" />
+                </label>
+                <label class="field">
+                  <span class="label">背景色</span>
+                  <input id="cardBg" type="color" value="#ffffff" />
+                </label>
+              </div>
+
+              <div class="hint" id="cardBgHint">建议：优先选择浅色卡片底（白/冷白/奶油白），更通用且更利于扫码对比。</div>
+              <div class="presetButtonsWrap" id="cardBgSuggestions" aria-label="卡片背景色建议">
+                <div class="presetButtons" aria-label="建议颜色">
+                  <button class="presetBtn" type="button" data-color="#ffffff" title="#ffffff">白</button>
+                  <button class="presetBtn" type="button" data-color="#f8fafc" title="#f8fafc">冷白</button>
+                  <button class="presetBtn" type="button" data-color="#fff7ed" title="#fff7ed">奶油</button>
+                  <button class="presetBtn" type="button" data-color="#f5f3ff" title="#f5f3ff">淡紫</button>
+                  <button class="presetBtn" type="button" data-color="#0b1020" title="#0b1020">深蓝</button>
+                  <button class="presetBtn" type="button" data-color="#070a12" title="#070a12">黑</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="sceneLayout" aria-label="导出">
+              <div class="sceneLayoutTitle">导出</div>
+
+              <div class="row">
+                <label class="field grow">
+                  <span class="label">导出模板</span>
+                  <select id="exportTemplate">
+                    <option value="current">当前画布</option>
+                    <option value="sticker800">贴纸 800x800</option>
+                    <option value="card1200x800">名片 1200x800</option>
+                    <option value="poster1080x1920">海报 1080x1920</option>
+                    <option value="a4">A4 2480x3508</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="row actions">
+                <button class="btn" type="button" id="btnPng">下载 PNG</button>
+                <button class="btn" type="button" id="btnSvg">下载 SVG</button>
+                <button class="btn primary" type="button" id="btnCopy">复制 PNG</button>
+              </div>
+
+              <div class="hint">提示：印刷场景建议 ECC 选 Q/H，留白 4 以上。</div>
+            </div>
+          </div>
+
+          <div class="inspirationWrap" aria-label="预设与灵感">
+            <div class="inspirationHeader">
+              <div>
+                <div class="inspirationTitle">预设与灵感</div>
+                <div class="inspirationHint">点击标签直接套用，预览会立即更新。</div>
+              </div>
+            </div>
+
+            <div class="presetFilters" id="presetFilters" aria-label="预设筛选">
+              <button class="chip" type="button" data-tag="featured">精选</button>
+              <button class="chip" type="button" data-tag="all">全部</button>
+            </div>
+
+            <div class="presetButtonsWrap" id="presetButtonsWrap" aria-label="灵感按钮区">
+              <div class="presetButtons" id="presetButtons" aria-label="灵感按钮"></div>
+            </div>
+          </div>
+
+          <div class="batchWrap hidden" id="batchResults">
+            <div class="batchTitle">批量结果</div>
+            <div class="batchGrid" id="batchGrid"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./assets/vendor/qrcode-generator.js"></script>
+    <script type="module" src="./assets/app.js"></script>
+  </body>
+</html>
